@@ -13,8 +13,9 @@ const ReporteUsuarios: React.FC = () =>{
     useEffect(()=> {
             const obtenerUsuarios = async () =>{
                 const respuesta = await axios.get<ReporteUsuariosOut>("https://gersinnioturismo-vlak-kn-055dcb5e31ee.herokuapp.com/api/route/Obtener_Usuarios");
-
+                
                 if(respuesta.data.codigoRespuesta === 0){
+                    console.log((respuesta.data.detalle))
                     setUsuarios(respuesta.data.detalle);
                 }
             }
@@ -22,13 +23,18 @@ const ReporteUsuarios: React.FC = () =>{
             obtenerUsuarios();
     }, [])
 
+    useEffect(()=>{
+        console.log(usuarios)
+
+    },[usuarios])
+
 
     const usuarioFiltrados = useMemo(()=>{
-        return usuarios.filter(usuario => usuario.nombre.toUpperCase().includes(filtro.toUpperCase())
+         return usuarios.filter(usuario => usuario.nombre.toUpperCase().includes(filtro.toUpperCase())
                                       || usuario.correo.toUpperCase().includes(filtro.toUpperCase())
                                       || usuario.telefono.toUpperCase().includes(filtro.toUpperCase())
                                       || ObtenerNombreRol(usuario.rol).toUpperCase().includes(filtro.toUpperCase()))
-    }, [filtro])
+    }, [filtro, usuarios])
 
     function ObtenerNombreRol (rol: number){
 
